@@ -83,6 +83,36 @@ macro_rules! ax_println {
     }
 }
 
+#[macro_export]
+macro_rules! pinfo {
+    ($($arg:tt)*) => {
+        let level = option_env!("debug").unwrap_or("0").parse::<u8>().unwrap();
+        if level < 1 {
+            $crate::__print_impl(format_args!("\u{1B}[32m[INFO] [kernel] {}\u{1B}[0m\n", format_args!($($arg)*)));
+        }
+    }
+}
+
+#[macro_export]
+macro_rules! pdev {
+    ($($arg:tt)*) => {
+        let level = option_env!("debug").unwrap_or("0").parse::<u8>().unwrap();
+        if level < 2 {
+            $crate::__print_impl(format_args!("\u{1B}[35m[DEV] [kernel] {}\u{1B}[0m\n", format_args!($($arg)*)));
+        }
+    }
+}
+
+#[macro_export]
+macro_rules! pdebug {
+    ($($arg:tt)*) => {
+        let level = option_env!("debug").unwrap_or("0").parse::<u8>().unwrap();
+        if level < 3 {
+            $crate::__print_impl(format_args!("\u{1B}[34m[DEBUG] [kernel] {}\u{1B}[0m\n", format_args!($($arg)*)));
+        }
+    }
+}
+
 macro_rules! with_color {
     ($color_code:expr, $($arg:tt)*) => {{
         format_args!("\u{1B}[{}m{}\u{1B}[m", $color_code as u8, format_args!($($arg)*))
