@@ -171,3 +171,13 @@ pub fn __print_impl(args: core::fmt::Arguments) {
         stdout().lock().write_fmt(args).unwrap();
     }
 }
+
+#[doc(hidden)]
+pub fn app_log(debug_level: u8, level: u8, args: core::fmt::Arguments) {
+    match level {
+        _ if level >= 1 && level <= debug_level => {
+            __print_impl(args);
+        },
+        _ => (),
+    }
+}

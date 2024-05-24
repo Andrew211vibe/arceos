@@ -26,9 +26,7 @@ macro_rules! println {
 macro_rules! pinfo {
     ($($arg:tt)*) => {
         let level = option_env!("debug").unwrap_or("0").parse::<u8>().unwrap();
-        if level < 1 {
-            $crate::io::__print_impl(format_args!("\u{1B}[97m[INFO] [user] {}\u{1B}[0m\n", format_args!($($arg)*)));
-        }
+        $crate::io::app_log(level, 1, format_args!("\u{1B}[97m[INFO] [app] {}\u{1B}[0m\n", format_args!($($arg)*)));
     }
 }
 
@@ -36,9 +34,7 @@ macro_rules! pinfo {
 macro_rules! pdev {
     ($($arg:tt)*) => {
         let level = option_env!("debug").unwrap_or("0").parse::<u8>().unwrap();
-        if level < 2 {
-            $crate::io::__print_impl(format_args!("\u{1B}[96m[DEV] [user] {}\u{1B}[0m\n", format_args!($($arg)*)));
-        }
+        $crate::io::app_log(level, 2, format_args!("\u{1B}[96m[DEV] [app] {}\u{1B}[0m\n", format_args!($($arg)*)));
     }
 }
 
@@ -46,8 +42,6 @@ macro_rules! pdev {
 macro_rules! pdebug {
     ($($arg:tt)*) => {
         let level = option_env!("debug").unwrap_or("0").parse::<u8>().unwrap();
-        if level < 3 {
-            $crate::io::__print_impl(format_args!("\u{1B}[95m[DEBUG] [user] {}\u{1B}[0m\n", format_args!($($arg)*)));
-        }
+        $crate::io::app_log(level, 3, format_args!("\u{1B}[95m[DEBUG] [app] {}\u{1B}[0m\n", format_args!($($arg)*)));
     }
 }
