@@ -23,6 +23,7 @@ pub const MAX_IRQ_COUNT: usize = 256;
 pub const TIMER_IRQ_NUM: usize = APIC_TIMER_VECTOR as usize;
 
 const IO_APIC_BASE: PhysAddr = PhysAddr::from(0xFEC0_0000);
+const IRQ: usize = 32;
 
 static mut LOCAL_APIC: Option<LocalApic> = None;
 static mut IS_X2APIC: bool = false;
@@ -34,10 +35,12 @@ pub fn set_enable(vector: usize, enabled: bool) {
     // should not affect LAPIC interrupts
     if vector < APIC_TIMER_VECTOR as _ {
         unsafe {
+            let vector = vector - IRQ;
+            let mut apic = IO_APIC.lock();
             if enabled {
-                IO_APIC.lock().enable_irq(vector as u8);
+                apic.enable_irq(vector as u8);
             } else {
-                IO_APIC.lock().disable_irq(vector as u8);
+                apic.disable_irq(vector as u8);
             }
         }
     }
@@ -114,7 +117,10 @@ pub(super) fn init_primary() {
     }
 
     info!("Initialize IO APIC...");
-    let io_apic = unsafe { IoApic::new(phys_to_virt(IO_APIC_BASE).as_usize() as u64) };
+    let mut io_apic = unsafe { IoApic::new(phys_to_virt(IO_APIC_BASE).as_usize() as u64) };
+    unsafe {
+        io_apic.init(IRQ as u8);
+    }
     IO_APIC.init_by(SpinNoIrq::new(io_apic));
 }
 

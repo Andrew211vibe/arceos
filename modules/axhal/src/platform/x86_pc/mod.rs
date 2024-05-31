@@ -1,8 +1,9 @@
 mod apic;
 mod boot;
 mod dtables;
-//mod uart16550;
+// mod uart16550;
 mod vga_buffer;
+mod ps2_key;
 
 pub mod mem;
 pub mod misc;
@@ -17,8 +18,12 @@ pub mod irq {
 }
 
 pub mod console {
-    //pub use super::uart16550::*;
+    // pub use super::uart16550::*;
     pub use super::vga_buffer::*;
+}
+
+pub mod keyboard {
+    pub use super::ps2_key::*;
 }
 
 extern "C" {
@@ -61,6 +66,7 @@ unsafe extern "C" fn rust_entry_secondary(magic: usize) {
 pub fn platform_init() {
     self::console::init();
     self::apic::init_primary();
+    self::keyboard::init();
     self::time::init_primary();
 }
 

@@ -13,6 +13,9 @@ pub mod console {
     }
 }
 
+pub mod keyboard {
+}
+
 pub mod misc {
     /// Shutdown the whole system, including all CPUs.
     pub fn terminate() -> ! {
