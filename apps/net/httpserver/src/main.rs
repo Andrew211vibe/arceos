@@ -15,7 +15,7 @@ extern crate axstd as std;
 
 use std::io::{self, prelude::*};
 use std::net::{TcpListener, TcpStream};
-use std::thread;
+use std::{fs, thread};
 
 const LOCAL_IP: &str = "0.0.0.0";
 const LOCAL_PORT: u16 = 5555;
@@ -32,7 +32,7 @@ Connection: close\r\n\
     };
 }
 
-const CONTENT: &str = r#"<html>
+const _CONTENT: &str = r#"<html>
 <head>
   <title>Hello, ArceOS</title>
 </head>
@@ -63,7 +63,12 @@ fn http_server(mut stream: TcpStream) -> io::Result<()> {
     let mut buf = [0u8; 4096];
     let _len = stream.read(&mut buf)?;
 
-    let response = format!(header!(), CONTENT.len(), CONTENT);
+    // Using fs::read to read index.html for response
+    let content = fs::read("/tmp/index.html")?;
+    let content = unsafe { core::str::from_utf8_unchecked(&content) };
+
+    // let response = format!(header!(), CONTENT.len(), CONTENT);
+    let response = format!(header!(), content.len(), content);
     stream.write_all(response.as_bytes())?;
 
     Ok(())

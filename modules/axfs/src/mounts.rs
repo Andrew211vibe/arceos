@@ -17,8 +17,35 @@ pub(crate) fn devfs() -> Arc<fs::devfs::DeviceFileSystem> {
 }
 
 #[cfg(feature = "ramfs")]
-pub(crate) fn ramfs() -> Arc<fs::ramfs::RamFileSystem> {
-    Arc::new(fs::ramfs::RamFileSystem::new())
+pub(crate) fn ramfs() -> VfsResult<Arc<fs::ramfs::RamFileSystem>> {
+    let tmpfs = fs::ramfs::RamFileSystem::new();
+    let tmp_root = tmpfs.root_dir();
+
+    // Create /tmp/index.html
+    tmp_root.create("index.html", VfsNodeType::File)?;
+    let file_html = tmp_root.clone().lookup("./index.html")?;
+    file_html.write_at(0, r#"<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<title>辰龙操作系统（ChenLongOS）</title>
+
+<meta property="og:title" content="辰龙操作系统（ChenLongOS）" />
+  </head>
+  <body>
+    <div class="container-lg px-3 my-5 markdown-body"> \
+
+      <h1><a href="https://chenlongos.com/">欢迎来到辰龙社区</a></h1>
+    </div>
+  </body>
+</html>
+"#.as_bytes())?;
+
+    Ok(Arc::new(tmpfs))
 }
 
 #[cfg(feature = "procfs")]

@@ -164,7 +164,7 @@ pub(crate) fn init_rootfs(disk: crate::dev::Disk) {
 
     #[cfg(feature = "ramfs")]
     root_dir
-        .mount("/tmp", mounts::ramfs())
+        .mount("/tmp", mounts::ramfs().unwrap())
         .expect("failed to mount ramfs at /tmp");
 
     // Mount another ramfs as procfs

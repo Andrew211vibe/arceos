@@ -1,8 +1,8 @@
 mod apic;
 mod boot;
 mod dtables;
-// mod uart16550;
-mod vga_buffer;
+mod uart16550;
+// mod vga_buffer;
 mod ps2_key;
 
 pub mod mem;
@@ -18,8 +18,8 @@ pub mod irq {
 }
 
 pub mod console {
-    // pub use super::uart16550::*;
-    pub use super::vga_buffer::*;
+    pub use super::uart16550::*;
+    // pub use super::vga_buffer::*;
 }
 
 pub mod keyboard {

@@ -65,10 +65,6 @@ pub mod console {
     }
 }
 
-pub mod keyboard {
-    pub use super::platform::keyboard::*;
-}
-
 /// Miscellaneous operation, e.g. terminate the system.
 pub mod misc {
     pub use super::platform::misc::*;
