@@ -40,6 +40,10 @@ pub(crate) fn ramfs() -> VfsResult<Arc<fs::ramfs::RamFileSystem>> {
     <div class="container-lg px-3 my-5 markdown-body"> \
 
       <h1><a href="https://chenlongos.com/">欢迎来到辰龙社区</a></h1>
+      <img src="https://chenlongos.cn/images/black-logo.png" alt="ChenLongOS Logo">
+      <p>This is <span style="color: blue;">blue</span> text.</p>
+      <p>This is <span style="color: red;">red</span> text.</p>
+      <p>This is <span style="color: green;">green</span> text.</p>
     </div>
   </body>
 </html>
